@@ -1,228 +1,229 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VOIDHIVE — Cyber Phenomenon</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
-
-<!-- ✅ SUPABASE -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-body {
-  margin:0;
-  font-family:'Inter', sans-serif;
-  background:#05010f;
-  color:white;
-  text-align:center;
-}
-
-.nav {
-  display:flex;
-  justify-content:space-between;
-  padding:20px 40px;
-}
-
-.logo {
-  font-family:'Orbitron';
-  color:#FF00FF;
-}
-
-.btn {
-  padding:12px 20px;
-  border-radius:10px;
-  border:none;
-  background:linear-gradient(90deg,#FF00FF,#00FFFF);
-  color:white;
-  cursor:pointer;
-}
-
-.connected {
-  background:#39FF9F !important;
-  color:black !important;
-}
-
-.wallet-status {
-  font-size:0.8rem;
-  margin-top:5px;
-}
-
-.hero {
-  margin-top:120px;
-}
-
-/* POPUP */
-.wallet-popup {
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  display:none;
-  justify-content:center;
-  align-items:center;
-  background:rgba(0,0,0,0.8);
-}
-
-.wallet-popup-box {
-  background:#0A001F;
-  padding:25px;
-  border-radius:15px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOIDHIVE — Cyber Phenomenon</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        /* --- YOUR LAYOUT.HTML CSS GOES HERE --- */
+        /* Below is the base CSS from your system optimized for a cool cyberpunk layout */
+        body { 
+            margin: 0; 
+            font-family: 'Inter', sans-serif; 
+            background: #05010f; 
+            color: white; 
+            text-align: center;
+        }
+        .nav { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 20px 40px;
+            background: rgba(10, 0, 31, 0.8);
+            border-bottom: 1px solid #FF00FF;
+        }
+        .logo { 
+            font-family: 'Orbitron'; 
+            color: #FF00FF;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        .btn { 
+            padding: 12px 20px; 
+            border-radius: 10px; 
+            border: none; 
+            background: linear-gradient(90deg, #FF00FF, #00FFFF); 
+            color: white; 
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        .connected { 
+            background: #39FF9F !important; 
+            color: black !important;
+        }
+        .wallet-status { 
+            font-size: 0.8rem; 
+            margin-top: 5px;
+            color: #aaa;
+        }
+        .hero { 
+            margin-top: 120px;
+        }
+        .hero h1 {
+            font-family: 'Orbitron';
+            font-size: 4rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px #FF00FF;
+        }
+        
+        /* POPUP CSS */
+        .wallet-popup { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            display: none; /* Hidden by default */
+            justify-content: center; 
+            align-items: center; 
+            background: rgba(0,0,0,0.8);
+            z-index: 999;
+        }
+        .wallet-popup-box { 
+            background: #0A001F; 
+            padding: 30px; 
+            border-radius: 15px;
+            border: 2px solid #00FFFF;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="nav">
-  <div class="logo">VOIDHIVE</div>
+    <div class="nav"> 
+        <div class="logo">VOIDHIVE</div>
+        <div> 
+            <button id="walletBtn" class="btn">Connect Wallet</button> 
+            <div id="walletStatus" class="wallet-status">⚫ Not Connected</div> 
+        </div>
+    </div>
+    
+    <div class="hero"> 
+        <h1>VOIDHIVE</h1> 
+        <p id="heroText">Crypto • Community • Alpha</p>
+    </div>
 
-  <div>
-    <button id="walletBtn" class="btn">Connect Wallet</button>
-    <div id="walletStatus" class="wallet-status">⚫ Not Connected</div>
-  </div>
-</div>
+    <div id="walletPopup" class="wallet-popup"> 
+        <div class="wallet-popup-box"> 
+            <h3 style="color:#FF00FF;">👻 OPEN IN PHANTOM</h3> 
+            <p> Step 1: Open in Phantom<br> Step 2: Tap Connect<br> Step 3: Approve </p> 
+            <button onclick="openPhantom()" class="btn">Open Phantom</button> 
+            <button onclick="closePopup()" class="btn" style="background: #333; margin-top: 10px;">Cancel</button>
+        </div>
+    </div>
 
-<div class="hero">
-  <h1>VOIDHIVE</h1>
-  <p id="heroText">Crypto • Community • Alpha</p>
-</div>
+    <script>
+        /* 🔑 CONFIG - Replace with your actual Supabase details */
+        const SUPABASE_URL = "https://xlkoukswxydkidlbuunv.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhsa291a3N3eHlka2lkbGJ1dW52Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4NDk4OTMsImV4cCI6MjA4OTQyNTg5M30.bfgZXToibaGAhLWqCB6MveIyYvdleWiHf-zKKfFJq7g";
 
-<!-- POPUP -->
-<div id="walletPopup" class="wallet-popup">
-  <div class="wallet-popup-box">
-    <h3>👻 OPEN IN PHANTOM</h3>
-    <p>
-      Step 1: Open in Phantom<br>
-      Step 2: Tap Connect<br>
-      Step 3: Approve
-    </p>
-    <button onclick="openPhantom()" class="btn">Open Phantom</button>
-  </div>
-</div>
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        console.log("Supabase loaded:", !!supabaseClient);
 
-<script>
+        /* BUTTON EVENT */
+        document.getElementById("walletBtn").addEventListener("click", connectWallet);
 
-/* 🔑 CONFIG */
-const SUPABASE_URL = "https://xlkoukswxydkidlbuunv.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhsa291a3N3eHlka2lkbGJ1dW52Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4NDk4OTMsImV4cCI6MjA4OTQyNTg5M30.bfgZXToibaGAhLWqCB6MveIyYvdleWiHf-zKKfFJq7g";
+        /* CONNECT WALLET */
+        async function connectWallet() { 
+            console.log("CLICKED");
+            try {
+                if (window.solana && window.solana.isPhantom) {
+                    console.log("Phantom detected");
+                    const resp = await window.solana.connect(); 
+                    console.log("Wallet response:", resp);
+                    
+                    const wallet = resp.publicKey.toString(); 
+                    console.log("Wallet:", wallet);
+                    
+                    updateUI(wallet); 
+                    await saveWallet(wallet);
+                } else {
+                    console.log("No wallet found");
+                    const isMobile = /iPhone|Android/i.test(navigator.userAgent);
+                    if(isMobile){ 
+                        document.getElementById("walletPopup").style.display="flex"; 
+                    } else { 
+                        window.open("https://phantom.app/", "_blank"); 
+                    }
+                }
+            } catch(err){ 
+                console.error("ERROR:", err); 
+            }
+        }
 
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        /* SAVE WALLET */
+        async function saveWallet(wallet) {
+            console.log("Saving wallet:", wallet);
+            
+            // Prevent duplicate locally 
+            if(localStorage.getItem("savedWallet") === wallet){ 
+                showWhitelisted(); 
+                return; 
+            }
+            
+            // Check existing in database
+            const { data: existing } = await supabaseClient
+                .from("wallets")
+                .select("*")
+                .eq("wallet", wallet);
 
-console.log("Supabase loaded:", supabaseClient);
+            if(existing && existing.length > 0){ 
+                console.log("Already exists"); 
+                showWhitelisted(); 
+                return; 
+            }
+            
+            // Insert new wallet
+            const { error } = await supabaseClient
+                .from("wallets")
+                .insert([{ wallet: wallet }]);
 
-/* BUTTON EVENT */
-document.getElementById("walletBtn").addEventListener("click", connectWallet);
+            if(error){ 
+                console.error("Insert error:", error); 
+            } else { 
+                console.log("Saved to Supabase ✅"); 
+                localStorage.setItem("savedWallet", wallet); 
+                showWhitelisted(); 
+            }
+        }
 
-/* CONNECT WALLET */
-async function connectWallet(){
-  console.log("CLICKED");
+        /* UI UPDATES */
+        function updateUI(wallet) { 
+            const short = wallet.slice(0,4) + "..." + wallet.slice(-4);
+            
+            const btn = document.getElementById("walletBtn");
+            btn.innerText = short; 
+            btn.classList.add("connected");
+            
+            document.getElementById("walletStatus").innerText = "🟢 Connected"; 
+            document.getElementById("heroText").innerText = "👾 Connected to VOIDHIVE";
+        }
 
-  try {
+        function showWhitelisted() { 
+            document.getElementById("walletStatus").innerText = "👾 Whitelisted";
+        }
 
-    if (window.solana && window.solana.isPhantom) {
+        /* MOBILE HELPERS */
+        function openPhantom() { 
+            window.location.href = "https://phantom.app/ul/browse/" + window.location.href;
+        }
+        
+        function closePopup() {
+            document.getElementById("walletPopup").style.display="none";
+        }
 
-      console.log("Phantom detected");
-
-      const resp = await window.solana.connect();
-      console.log("Wallet response:", resp);
-
-      const wallet = resp.publicKey.toString();
-      console.log("Wallet:", wallet);
-
-      updateUI(wallet);
-      await saveWallet(wallet);
-
-    } else {
-
-      console.log("No wallet found");
-
-      const isMobile = /iPhone|Android/i.test(navigator.userAgent);
-
-      if(isMobile){
-        document.getElementById("walletPopup").style.display="flex";
-      } else {
-        window.open("https://phantom.app/", "_blank");
-      }
-
-    }
-
-  } catch(err){
-    console.error("ERROR:", err);
-  }
-}
-
-/* SAVE WALLET */
-async function saveWallet(wallet){
-
-  console.log("Saving wallet:", wallet);
-
-  // prevent duplicate locally
-  if(localStorage.getItem("savedWallet") === wallet){
-    showWhitelisted();
-    return;
-  }
-
-  // check existing
-  const { data: existing } = await supabaseClient
-    .from("wallets")
-    .select("*")
-    .eq("wallet", wallet);
-
-  if(existing && existing.length > 0){
-    console.log("Already exists");
-    showWhitelisted();
-    return;
-  }
-
-  const { error } = await supabaseClient
-    .from("wallets")
-    .insert([{ wallet: wallet }]);
-
-  if(error){
-    console.error("Insert error:", error);
-  } else {
-    console.log("Saved to Supabase ✅");
-    localStorage.setItem("savedWallet", wallet);
-    showWhitelisted();
-  }
-}
-
-/* UI */
-function updateUI(wallet){
-  const short = wallet.slice(0,4)+"..."+wallet.slice(-4);
-
-  document.getElementById("walletBtn").innerText = short;
-  document.getElementById("walletBtn").classList.add("connected");
-
-  document.getElementById("walletStatus").innerText = "🟢 Connected";
-  document.getElementById("heroText").innerText = "👾 Connected to VOIDHIVE";
-}
-
-function showWhitelisted(){
-  document.getElementById("walletStatus").innerText = "👾 Whitelisted";
-}
-
-/* MOBILE */
-function openPhantom(){
-  window.location.href =
-    "https://phantom.app/ul/browse/" + window.location.href;
-}
-
-/* 🧪 TEST SUPABASE ON LOAD */
-async function testSupabase(){
-  const { error } = await supabaseClient
-    .from("wallets")
-    .insert([{ wallet: "TEST_" + Math.random() }]);
-
-  console.log("TEST INSERT:", error ? error.message : "SUCCESS");
-}
-
-testSupabase();
-
-</script>
-
+        /* 🧪 TEST SUPABASE ON LOAD (Optional - you can remove this later) */
+        async function testSupabase() { 
+            /* Uncomment if you want to test database inserts automatically on load
+            const { error } = await supabaseClient
+                .from("wallets")
+                .insert([{ wallet: "TEST_" + Math.random() }]);
+            console.log("TEST INSERT:", error ? error.message : "SUCCESS");
+            */
+        }
+        testSupabase();
+    </script>
 </body>
 </html>
+
+
