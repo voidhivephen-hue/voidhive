@@ -119,6 +119,12 @@ iframe {
 
 <canvas id="bg"></canvas>
 
+<!-- NAV -->
+<div class="nav">
+  <div class="logo">VOIDHIVE</div>
+  <button class="btn" onclick="connectWallet()">Connect Wallet</button>
+</div>
+
 <!-- HERO -->
 <div class="hero">
   <h1>VOIDHIVE</h1>
@@ -193,269 +199,20 @@ setInterval(()=>{
     Math.floor(Math.random()*2000)+1000;
 },3000);
 
+/* WALLET */
+async function connectWallet(){
+  if(window.solana){
+    const res = await window.solana.connect();
+    alert("Connected: "+res.publicKey.toString());
+  } else {
+    alert("Install Phantom Wallet");
+  }
+}
+
 /* FAKE MINT */
 function mint(){
   alert("Mint coming soon 👾");
 }
-
-</script>
-
-<!-- FLOAT -->
-<div class="floating">👻 👾 🦩 🎃</div>
-
-<div id="walletPopup" class="wallet-popup">
-  <div class="wallet-popup-box">
-    <h3>👻 OPEN IN PHANTOM</h3>
-    <p>
-      Step 1: Open in Phantom<br>
-      Step 2: Tap Connect Wallet<br>
-      Step 3: Approve connection
-    </p>
-
-    <button onclick="openPhantom()" class="btn">Open Phantom</button>
-    <button onclick="closePopup()" class="btn secondary">Close</button>
-  </div>
-</div>
-
-<script>
-
-console.log("JS LOADED");
-
-<!-- ✅ SUPABASE -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-body {
-  margin:0;
-  font-family:'Inter', sans-serif;
-  background:#05010f;
-  color:white;
-  text-align:center;
-}
-
-.nav {
-  display:flex;
-  justify-content:space-between;
-  padding:20px 40px;
-}
-
-.logo {
-  font-family:'Orbitron';
-  color:#FF00FF;
-}
-
-.btn {
-  padding:12px 20px;
-  border-radius:10px;
-  border:none;
-  background:linear-gradient(90deg,#FF00FF,#00FFFF);
-  color:white;
-  cursor:pointer;
-}
-
-.connected {
-  background:#39FF9F !important;
-  color:black !important;
-}
-
-.wallet-status {
-  font-size:0.8rem;
-  margin-top:5px;
-}
-
-.hero {
-  margin-top:120px;
-}
-
-/* POPUP */
-.wallet-popup {
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  display:none;
-  justify-content:center;
-  align-items:center;
-  background:rgba(0,0,0,0.8);
-}
-
-.wallet-popup-box {
-  background:#0A001F;
-  padding:25px;
-  border-radius:15px;
-}
-</style>
-</head>
-
-<body>
-
-<div class="nav">
-  <div class="logo">VOIDHIVE</div>
-
-  <div>
-    <button id="walletBtn" class="btn">Connect Wallet</button>
-    <p style="font-size:12px;opacity:0.6;">
-Connecting shares your public wallet for whitelist 👾
-</p>
-    <div id="walletStatus" class="wallet-status">⚫ Not Connected</div>
-  </div>
-</div>
-
-<script>
-
-/* 🔑 CONFIG */
-const SUPABASE_URL = "https://xlkoukswxydkidlbuunv.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhsa291a3N3eHlka2lkbGJ1dW52Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4NDk4OTMsImV4cCI6MjA4OTQyNTg5M30.bfgZXToibaGAhLWqCB6MveIyYvdleWiHf-zKKfFJq7g";
-
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-console.log("Supabase loaded:", supabaseClient);
-
-/* BUTTON EVENT */
-document.getElementById("walletBtn").addEventListener("click", connectWallet);
-
-/* CONNECT WALLET */
-async function connectWallet(){
-  console.log("CLICKED CONNECT");
-
-  try {
-
-    if (window.solana && window.solana.isPhantom) {
-
-      const resp = await window.solana.connect();
-      console.log("PHANTOM RESPONSE:", resp);
-
-      if (!resp || !resp.publicKey) {
-        console.log("NO WALLET RETURNED");
-        return;
-      }
-
-      const wallet = resp.publicKey.toString();
-      console.log("WALLET:", wallet);
-
-      updateUI(wallet);
-
-      // 🔥 FORCE SAVE
-      await saveWallet(wallet);
-
-    } else {
-
-      console.log("NO PHANTOM");
-
-      const isMobile = /iPhone|Android/i.test(navigator.userAgent);
-
-      if(isMobile){
-        showPopup();
-      } else {
-        window.open("https://phantom.app/", "_blank");
-      }
-
-    }
-
-  } catch(err){
-    console.error("CONNECT ERROR:", err);
-  }
-}
-
-/* SAVE WALLET */
-async function saveWallet(wallet){
-
-  console.log("🔥 SAVING WALLET:", wallet);
-
-  const { error } = await supabaseClient
-    .from("wallets")
-    .insert([{ wallet }]);
-
-  if(error){
-    console.error("❌ INSERT ERROR:", error);
-  } else {
-    console.log("✅ WALLET SAVED:", wallet);
-  }
-}
-
-  // check existing
-  const { data: existing } = await supabaseClient
-    .from("wallets")
-    .select("*")
-    .eq("wallet", wallet);
-
-  if(existing && existing.length > 0){
-    console.log("Already exists");
-    showWhitelisted();
-    return;
-  }
-
-  const { error } = await supabaseClient
-    .from("wallets")
-    .insert([{ wallet: wallet }]);
-
-  if(error){
-    console.error("Insert error:", error);
-  } else {
-    console.log("Saved to Supabase ✅");
-    
-    localStorage.setItem("savedWallet", wallet);
-    showWhitelisted();
-  }
-}
-
-/* UI */
-function updateUI(wallet){
-  const short = wallet.slice(0,4)+"..."+wallet.slice(-4);
-
-  document.getElementById("walletBtn").innerText = short;
-  document.getElementById("walletBtn").classList.add("connected");
-
-  document.getElementById("walletStatus").innerText = "🟢 Connected";
-  document.getElementById("heroText").innerText = "👾 Connected to VOIDHIVE";
-}
-
-function showWhitelisted(){
-  document.getElementById("walletStatus").innerText = "👾 Whitelisted";
-}
-
-/* MOBILE */
-function openPhantom(){
-  window.location.href =
-    "https://phantom.app/ul/browse/" + window.location.href;
-}
-
-/* 🧪 TEST SUPABASE ON LOAD */
-async function testSupabase(){
-  const { error } = await supabaseClient
-    .from("wallets")
-    .insert([{ wallet: "TEST_" + Math.random() }]);
-
-  console.log("TEST INSERT:", error ? error.message : "SUCCESS");
-}
-
-window.addEventListener("load", async () => {
-
-  if (window.solana && window.solana.isPhantom) {
-
-    try {
-
-      const resp = await window.solana.connect({ onlyIfTrusted: true });
-
-      if (resp && resp.publicKey) {
-
-        const wallet = resp.publicKey.toString();
-
-        console.log("AUTO CONNECT:", wallet);
-
-        updateUI(wallet);
-        await saveWallet(wallet);
-
-      }
-
-    } catch (e) {
-      console.log("No auto connect");
-    }
-
-  }
-
-});
 
 </script>
 
