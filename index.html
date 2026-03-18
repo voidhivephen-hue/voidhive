@@ -215,36 +215,34 @@ setInterval(()=>{
 async function connectWallet(){
   try {
 
-    // ✅ DESKTOP (Phantom extension)
     if (window.solana && window.solana.isPhantom) {
 
-      const resp = await window.solana.connect();
+      const resp = await window.solana.connect({
+        onlyIfTrusted: false // 👈 FORCE approval popup
+      });
+
       const wallet = resp.publicKey.toString();
 
-      alert("Connected: " + wallet);
+      console.log("Connected:", wallet);
 
       saveWallet(wallet);
 
+      showConnectedUI(wallet);
+
     } else {
 
-      // 📱 MOBILE FALLBACK
       const isMobile = /iPhone|iPad|Android/i.test(navigator.userAgent);
 
-      if (isMobile) {
-        alert("Open this site inside Phantom app 👻");
-
-        // Try deep link
-        window.location.href = "https://phantom.app/ul/browse/" + window.location.href;
-
+      if(isMobile){
+        showPopup();
       } else {
-        // Desktop but no Phantom
         window.open("https://phantom.app/", "_blank");
       }
 
     }
 
   } catch (err) {
-    alert("Connection failed");
+    console.log(err);
   }
 }
 
@@ -275,13 +273,14 @@ window.addEventListener("load", () => {
     console.log("Phantom detected 👻");
 
     // Auto-connect (optional delay for UX)
-    setTimeout(() => {
-      connectWallet();
-    }, 800);
-
-  }
+  
 
 });
+
+function showConnectedUI(wallet){
+  document.querySelector(".hero p").innerText =
+    "👾 Connected: " + wallet.slice(0,4) + "..." + wallet.slice(-4);
+}
 
 </script>
 
