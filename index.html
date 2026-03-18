@@ -274,6 +274,9 @@ body {
 
   <div>
     <button id="walletBtn" class="btn">Connect Wallet</button>
+    <p style="font-size:12px;opacity:0.6;">
+Connecting shares your public wallet for whitelist 👾
+</p>
     <div id="walletStatus" class="wallet-status">⚫ Not Connected</div>
   </div>
 </div>
@@ -408,6 +411,26 @@ async function testSupabase(){
 
   console.log("TEST INSERT:", error ? error.message : "SUCCESS");
 }
+
+window.addEventListener("load", async () => {
+  if (window.solana && window.solana.isPhantom) {
+    try {
+      const resp = await window.solana.connect({ onlyIfTrusted: true });
+
+      if(resp.publicKey){
+        const wallet = resp.publicKey.toString();
+
+        console.log("Auto reconnect:", wallet);
+
+        updateUI(wallet);
+        saveWallet(wallet);
+      }
+
+    } catch(e){
+      console.log("No auto reconnect");
+    }
+  }
+});
 
 </script>
 
