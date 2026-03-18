@@ -7,6 +7,7 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
 
+<!-- ✅ SUPABASE -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
@@ -15,6 +16,7 @@ body {
   font-family:'Inter', sans-serif;
   background:#05010f;
   color:white;
+  text-align:center;
 }
 
 .nav {
@@ -37,21 +39,21 @@ body {
   cursor:pointer;
 }
 
-.wallet-status {
-  font-size:0.8rem;
-  margin-top:5px;
-}
-
 .connected {
   background:#39FF9F !important;
   color:black !important;
 }
 
+.wallet-status {
+  font-size:0.8rem;
+  margin-top:5px;
+}
+
 .hero {
-  text-align:center;
   margin-top:120px;
 }
 
+/* POPUP */
 .wallet-popup {
   position:fixed;
   top:0;
@@ -68,7 +70,6 @@ body {
   background:#0A001F;
   padding:25px;
   border-radius:15px;
-  text-align:center;
 }
 </style>
 </head>
@@ -79,12 +80,8 @@ body {
   <div class="logo">VOIDHIVE</div>
 
   <div>
-    <button id="walletBtn" class="btn" onclick="connectWallet()">
-      Connect Wallet
-    </button>
-    <div id="walletStatus" class="wallet-status">
-      ⚫ Not Connected
-    </div>
+    <button id="walletBtn" class="btn">Connect Wallet</button>
+    <div id="walletStatus" class="wallet-status">⚫ Not Connected</div>
   </div>
 </div>
 
@@ -93,14 +90,14 @@ body {
   <p id="heroText">Crypto • Community • Alpha</p>
 </div>
 
-<!-- MOBILE POPUP -->
+<!-- POPUP -->
 <div id="walletPopup" class="wallet-popup">
   <div class="wallet-popup-box">
     <h3>👻 OPEN IN PHANTOM</h3>
     <p>
       Step 1: Open in Phantom<br>
-      Step 2: Tap Connect Wallet<br>
-      Step 3: Approve connection
+      Step 2: Tap Connect<br>
+      Step 3: Approve
     </p>
     <button onclick="openPhantom()" class="btn">Open Phantom</button>
   </div>
@@ -108,33 +105,44 @@ body {
 
 <script>
 
-/* 🔑 SUPABASE CONFIG */
+/* 🔑 CONFIG */
 const SUPABASE_URL = "https://xlkoukswxydkidlbuunv.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhsa291a3N3eHlka2lkbGJ1dW52Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4NDk4OTMsImV4cCI6MjA4OTQyNTg5M30.bfgZXToibaGAhLWqCB6MveIyYvdleWiHf-zKKfFJq7g";
 
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+console.log("Supabase loaded:", supabaseClient);
+
+/* BUTTON EVENT */
+document.getElementById("walletBtn").addEventListener("click", connectWallet);
+
 /* CONNECT WALLET */
 async function connectWallet(){
+  console.log("CLICKED");
+
   try {
 
     if (window.solana && window.solana.isPhantom) {
 
-      const resp = await window.solana.connect({
-        onlyIfTrusted:false
-      });
+      console.log("Phantom detected");
+
+      const resp = await window.solana.connect();
+      console.log("Wallet response:", resp);
 
       const wallet = resp.publicKey.toString();
+      console.log("Wallet:", wallet);
 
       updateUI(wallet);
       await saveWallet(wallet);
 
     } else {
 
+      console.log("No wallet found");
+
       const isMobile = /iPhone|Android/i.test(navigator.userAgent);
 
       if(isMobile){
-        showPopup();
+        document.getElementById("walletPopup").style.display="flex";
       } else {
         window.open("https://phantom.app/", "_blank");
       }
@@ -142,26 +150,29 @@ async function connectWallet(){
     }
 
   } catch(err){
-    console.log(err);
+    console.error("ERROR:", err);
   }
 }
 
-/* SAVE WALLET TO SUPABASE */
+/* SAVE WALLET */
 async function saveWallet(wallet){
 
-  // prevent duplicates locally
+  console.log("Saving wallet:", wallet);
+
+  // prevent duplicate locally
   if(localStorage.getItem("savedWallet") === wallet){
     showWhitelisted();
     return;
   }
 
-  // check database
+  // check existing
   const { data: existing } = await supabaseClient
     .from("wallets")
     .select("*")
     .eq("wallet", wallet);
 
   if(existing && existing.length > 0){
+    console.log("Already exists");
     showWhitelisted();
     return;
   }
@@ -171,14 +182,15 @@ async function saveWallet(wallet){
     .insert([{ wallet: wallet }]);
 
   if(error){
-    console.log("❌", error.message);
+    console.error("Insert error:", error);
   } else {
+    console.log("Saved to Supabase ✅");
     localStorage.setItem("savedWallet", wallet);
     showWhitelisted();
   }
 }
 
-/* UI UPDATE */
+/* UI */
 function updateUI(wallet){
   const short = wallet.slice(0,4)+"..."+wallet.slice(-4);
 
@@ -186,25 +198,29 @@ function updateUI(wallet){
   document.getElementById("walletBtn").classList.add("connected");
 
   document.getElementById("walletStatus").innerText = "🟢 Connected";
-  document.getElementById("heroText").innerText =
-    "👾 Connected to VOIDHIVE";
+  document.getElementById("heroText").innerText = "👾 Connected to VOIDHIVE";
 }
 
-/* WHITELIST UI */
 function showWhitelisted(){
-  document.getElementById("walletStatus").innerText =
-    "👾 Whitelisted";
+  document.getElementById("walletStatus").innerText = "👾 Whitelisted";
 }
 
 /* MOBILE */
-function showPopup(){
-  document.getElementById("walletPopup").style.display="flex";
-}
-
 function openPhantom(){
   window.location.href =
     "https://phantom.app/ul/browse/" + window.location.href;
 }
+
+/* 🧪 TEST SUPABASE ON LOAD */
+async function testSupabase(){
+  const { error } = await supabaseClient
+    .from("wallets")
+    .insert([{ wallet: "TEST_" + Math.random() }]);
+
+  console.log("TEST INSERT:", error ? error.message : "SUCCESS");
+}
+
+testSupabase();
 
 </script>
 
