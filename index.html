@@ -131,15 +131,16 @@ function updateUI(wallet){
 /* SAVE WALLET */
 function saveWallet(wallet){
 
+  const formData = new FormData();
+  formData.append("entry.2037248657", wallet);
+
   fetch("https://docs.google.com/forms/d/e/1FAIpQLSeT73rEVqMUc_aViNEMmheWcshw1pJZOep0xwuy2FWGkn8fJA/formResponse", {
-    method:"POST",
-    mode:"no-cors",
-    headers:{
-      "Content-Type":"application/x-www-form-urlencoded"
-    },
-    body:`entry.2037248657=${wallet}`
+    method: "POST",
+    mode: "no-cors",
+    body: formData
   });
 
+  console.log("Saved:", wallet);
 }
 
 /* POPUP */
