@@ -345,7 +345,7 @@ async function connectWallet(){
 /* SAVE WALLET */
 async function saveWallet(wallet){
 
-  console.log("Saving wallet:", wallet);
+  console.log("REAL WALLET SAVED:", wallet);
 
   // prevent duplicate locally
   if(localStorage.getItem("savedWallet") === wallet){
@@ -373,6 +373,7 @@ async function saveWallet(wallet){
     console.error("Insert error:", error);
   } else {
     console.log("Saved to Supabase ✅");
+    
     localStorage.setItem("savedWallet", wallet);
     showWhitelisted();
   }
