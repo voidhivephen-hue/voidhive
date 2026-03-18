@@ -7,6 +7,8 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 body {
   margin:0;
@@ -15,7 +17,6 @@ body {
   color:white;
 }
 
-/* NAV */
 .nav {
   display:flex;
   justify-content:space-between;
@@ -27,7 +28,6 @@ body {
   color:#FF00FF;
 }
 
-/* BUTTON */
 .btn {
   padding:12px 20px;
   border-radius:10px;
@@ -37,13 +37,21 @@ body {
   cursor:pointer;
 }
 
-/* STATUS */
 .wallet-status {
   font-size:0.8rem;
   margin-top:5px;
 }
 
-/* POPUP */
+.connected {
+  background:#39FF9F !important;
+  color:black !important;
+}
+
+.hero {
+  text-align:center;
+  margin-top:120px;
+}
+
 .wallet-popup {
   position:fixed;
   top:0;
@@ -58,8 +66,8 @@ body {
 
 .wallet-popup-box {
   background:#0A001F;
-  padding:20px;
-  border-radius:12px;
+  padding:25px;
+  border-radius:15px;
   text-align:center;
 }
 </style>
@@ -71,22 +79,40 @@ body {
   <div class="logo">VOIDHIVE</div>
 
   <div>
-    <button onclick="connectWallet()" id="walletBtn" class="btn">
+    <button id="walletBtn" class="btn" onclick="connectWallet()">
       Connect Wallet
     </button>
-    <div id="walletStatus" class="wallet-status">⚫ Not Connected</div>
+    <div id="walletStatus" class="wallet-status">
+      ⚫ Not Connected
+    </div>
   </div>
 </div>
 
-<!-- POPUP -->
+<div class="hero">
+  <h1>VOIDHIVE</h1>
+  <p id="heroText">Crypto • Community • Alpha</p>
+</div>
+
+<!-- MOBILE POPUP -->
 <div id="walletPopup" class="wallet-popup">
   <div class="wallet-popup-box">
-    <p>Open inside Phantom 👻</p>
+    <h3>👻 OPEN IN PHANTOM</h3>
+    <p>
+      Step 1: Open in Phantom<br>
+      Step 2: Tap Connect Wallet<br>
+      Step 3: Approve connection
+    </p>
     <button onclick="openPhantom()" class="btn">Open Phantom</button>
   </div>
 </div>
 
 <script>
+
+/* 🔑 SUPABASE CONFIG */
+const SUPABASE_URL = "https://xlkoukswxydkidlbuunv.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhsa291a3N3eHlka2lkbGJ1dW52Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4NDk4OTMsImV4cCI6MjA4OTQyNTg5M30.bfgZXToibaGAhLWqCB6MveIyYvdleWiHf-zKKfFJq7g";
+
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 /* CONNECT WALLET */
 async function connectWallet(){
@@ -101,7 +127,7 @@ async function connectWallet(){
       const wallet = resp.publicKey.toString();
 
       updateUI(wallet);
-      saveWallet(wallet);
+      await saveWallet(wallet);
 
     } else {
 
@@ -115,42 +141,69 @@ async function connectWallet(){
 
     }
 
-  } catch(e){
-    console.log(e);
+  } catch(err){
+    console.log(err);
   }
 }
 
-/* UPDATE UI */
+/* SAVE WALLET TO SUPABASE */
+async function saveWallet(wallet){
+
+  // prevent duplicates locally
+  if(localStorage.getItem("savedWallet") === wallet){
+    showWhitelisted();
+    return;
+  }
+
+  // check database
+  const { data: existing } = await supabaseClient
+    .from("wallets")
+    .select("*")
+    .eq("wallet", wallet);
+
+  if(existing && existing.length > 0){
+    showWhitelisted();
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("wallets")
+    .insert([{ wallet: wallet }]);
+
+  if(error){
+    console.log("❌", error.message);
+  } else {
+    localStorage.setItem("savedWallet", wallet);
+    showWhitelisted();
+  }
+}
+
+/* UI UPDATE */
 function updateUI(wallet){
   const short = wallet.slice(0,4)+"..."+wallet.slice(-4);
 
   document.getElementById("walletBtn").innerText = short;
+  document.getElementById("walletBtn").classList.add("connected");
+
   document.getElementById("walletStatus").innerText = "🟢 Connected";
+  document.getElementById("heroText").innerText =
+    "👾 Connected to VOIDHIVE";
 }
 
-/* SAVE WALLET */
-function saveWallet(wallet){
-
-  const formData = new FormData();
-  formData.append("entry.2037248657", wallet);
-
-  fetch("https://docs.google.com/forms/d/e/1FAIpQLSeT73rEVqMUc_aViNEMmheWcshw1pJZOep0xwuy2FWGkn8fJA/formResponse", {
-    method: "POST",
-    mode: "no-cors",
-    body: formData
-  });
-
-  console.log("Saved:", wallet);
+/* WHITELIST UI */
+function showWhitelisted(){
+  document.getElementById("walletStatus").innerText =
+    "👾 Whitelisted";
 }
 
-/* POPUP */
+/* MOBILE */
 function showPopup(){
   document.getElementById("walletPopup").style.display="flex";
 }
 
 function openPhantom(){
   window.location.href =
-  "https://phantom.app/ul/browse/" + window.location.href;
+    "https://phantom.app/ul/browse/" + window.location.href;
 }
 
 </script>
