@@ -200,6 +200,27 @@ function mint(){
 
 </script>
 
+<!-- FLOAT -->
+<div class="floating">👻 👾 🦩 🎃</div>
+
+<div id="walletPopup" class="wallet-popup">
+  <div class="wallet-popup-box">
+    <h3>👻 OPEN IN PHANTOM</h3>
+    <p>
+      Step 1: Open in Phantom<br>
+      Step 2: Tap Connect Wallet<br>
+      Step 3: Approve connection
+    </p>
+
+    <button onclick="openPhantom()" class="btn">Open Phantom</button>
+    <button onclick="closePopup()" class="btn secondary">Close</button>
+  </div>
+</div>
+
+<script>
+
+console.log("JS LOADED");
+
 <!-- ✅ SUPABASE -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -278,19 +299,6 @@ body {
 Connecting shares your public wallet for whitelist 👾
 </p>
     <div id="walletStatus" class="wallet-status">⚫ Not Connected</div>
-  </div>
-</div>
-
-<!-- POPUP -->
-<div id="walletPopup" class="wallet-popup">
-  <div class="wallet-popup-box">
-    <h3>👻 OPEN IN PHANTOM</h3>
-    <p>
-      Step 1: Open in Phantom<br>
-      Step 2: Tap Connect<br>
-      Step 3: Approve
-    </p>
-    <button onclick="openPhantom()" class="btn">Open Phantom</button>
   </div>
 </div>
 
