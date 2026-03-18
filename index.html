@@ -267,6 +267,22 @@ function mint(){
   alert("Mint coming soon 👾");
 }
 
+window.addEventListener("load", () => {
+
+  // Detect Phantom browser
+  if (window.solana && window.solana.isPhantom) {
+
+    console.log("Phantom detected 👻");
+
+    // Auto-connect (optional delay for UX)
+    setTimeout(() => {
+      connectWallet();
+    }, 800);
+
+  }
+
+});
+
 </script>
 
 </body>
