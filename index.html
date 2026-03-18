@@ -309,31 +309,36 @@ document.getElementById("walletBtn").addEventListener("click", connectWallet);
 
 /* CONNECT WALLET */
 async function connectWallet(){
-  console.log("CLICKED");
+  console.log("CLICKED CONNECT");
 
   try {
 
     if (window.solana && window.solana.isPhantom) {
 
-      console.log("Phantom detected");
-
       const resp = await window.solana.connect();
-      console.log("Wallet response:", resp);
+      console.log("PHANTOM RESPONSE:", resp);
+
+      if (!resp || !resp.publicKey) {
+        console.log("NO WALLET RETURNED");
+        return;
+      }
 
       const wallet = resp.publicKey.toString();
-      console.log("Wallet:", wallet);
+      console.log("WALLET:", wallet);
 
       updateUI(wallet);
+
+      // 🔥 FORCE SAVE
       await saveWallet(wallet);
 
     } else {
 
-      console.log("No wallet found");
+      console.log("NO PHANTOM");
 
       const isMobile = /iPhone|Android/i.test(navigator.userAgent);
 
       if(isMobile){
-        document.getElementById("walletPopup").style.display="flex";
+        showPopup();
       } else {
         window.open("https://phantom.app/", "_blank");
       }
@@ -341,20 +346,25 @@ async function connectWallet(){
     }
 
   } catch(err){
-    console.error("ERROR:", err);
+    console.error("CONNECT ERROR:", err);
   }
 }
 
 /* SAVE WALLET */
 async function saveWallet(wallet){
 
-  console.log("REAL WALLET SAVED:", wallet);
+  console.log("🔥 SAVING WALLET:", wallet);
 
-  // prevent duplicate locally
-  if(localStorage.getItem("savedWallet") === wallet){
-    showWhitelisted();
-    return;
+  const { error } = await supabaseClient
+    .from("wallets")
+    .insert([{ wallet }]);
+
+  if(error){
+    console.error("❌ INSERT ERROR:", error);
+  } else {
+    console.log("✅ WALLET SAVED:", wallet);
   }
+}
 
   // check existing
   const { data: existing } = await supabaseClient
@@ -413,23 +423,30 @@ async function testSupabase(){
 }
 
 window.addEventListener("load", async () => {
+
   if (window.solana && window.solana.isPhantom) {
+
     try {
+
       const resp = await window.solana.connect({ onlyIfTrusted: true });
 
-      if(resp.publicKey){
+      if (resp && resp.publicKey) {
+
         const wallet = resp.publicKey.toString();
 
-        console.log("Auto reconnect:", wallet);
+        console.log("AUTO CONNECT:", wallet);
 
         updateUI(wallet);
-        saveWallet(wallet);
+        await saveWallet(wallet);
+
       }
 
-    } catch(e){
-      console.log("No auto reconnect");
+    } catch (e) {
+      console.log("No auto connect");
     }
+
   }
+
 });
 
 </script>
