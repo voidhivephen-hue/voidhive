@@ -1,70 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>VOIDHIVE — The Cyber Phenomenon</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
-  <style>
-    body { background: #0A001F; color: #FFFFFF; font-family: 'VT323', monospace; text-align: center; margin: 0; padding: 0; overflow: hidden; }
-    .void { background: radial-gradient(circle at center, #1a0033, #0A001F); height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-    .logo { width: 280px; filter: drop-shadow(0 0 60px #FF00FF); }
-    h1 { font-family: 'Orbitron', sans-serif; font-size: 4rem; margin: 10px; color: #FF00FF; text-shadow: 0 0 30px #00FFFF; }
-    p { font-size: 1.6rem; max-width: 620px; color: #00FFFF; text-shadow: 0 0 15px #39FF9F; }
-    .buttons a { display: inline-block; margin: 12px; padding: 14px 32px; background: transparent; border: 3px solid #39FF9F; color: #FFFFFF; text-decoration: none; font-family: 'Press Start 2P', cursive; font-size: 1.1rem; transition: all 0.3s; }
-    .buttons a:hover { background: #39FF9F; color: #000; box-shadow: 0 0 40px #FF00FF; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOIDHIVE — Cyber Phenomenon</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* BASE */
+body {
+  margin:0;
+  font-family:'Inter', sans-serif;
+  background:#05010f;
+  color:white;
+  overflow-x:hidden;
+}
+
+/* PARTICLES BG */
+canvas {
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:-1;
+}
+
+/* NAV */
+.nav {
+  display:flex;
+  justify-content:space-between;
+  padding:20px 40px;
+  backdrop-filter:blur(10px);
+}
+.logo {
+  font-family:'Orbitron';
+  color:#FF00FF;
+}
+
+/* HERO */
+.hero {
+  text-align:center;
+  margin-top:100px;
+}
+
+.hero h1 {
+  font-size:4rem;
+  font-family:'Orbitron';
+  background:linear-gradient(90deg,#FF00FF,#00FFFF);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.hero p {
+  opacity:0.7;
+  margin-top:10px;
+}
+
+/* BUTTONS */
+.btn {
+  margin:10px;
+  padding:12px 22px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.2);
+  background:rgba(255,255,255,0.05);
+  color:white;
+  cursor:pointer;
+  transition:0.3s;
+}
+.btn:hover {
+  background:#39FF9F;
+  color:black;
+  transform:translateY(-3px);
+}
+
+/* CARD */
+.card {
+  margin:60px auto;
+  max-width:800px;
+  padding:30px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,0.1);
+}
+
+/* STATS */
+.stats {
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  margin-top:20px;
+}
+
+/* DISCORD */
+iframe {
+  border-radius:15px;
+}
+
+/* FLOATING EMOJIS */
+.floating {
+  position:fixed;
+  bottom:10px;
+  width:100%;
+  text-align:center;
+  font-size:2rem;
+  animation:float 3s infinite alternate;
+}
+@keyframes float {
+  from {transform:translateY(0);}
+  to {transform:translateY(-10px);}
+}
+
+</style>
 </head>
+
 <body>
-  <div style="background:#FF00FF; color:#000; padding:12px; text-align:center; font-family:'Press Start 2P'; font-size:1.1rem; border-bottom:4px solid #39FF9F;">
-  🚨 FOUNDING GLITCH — FIRST 1,000 ONLY 👾<br>
-  Drop your alien selfie with #FoundingGlitch → Legendary NFT + role waiting!<br>
-  <a href="YOUR_GOOGLE_FORM_LINK" style="color:#000; text-decoration:underline;">JOIN NOW</a>
+
+<canvas id="bg"></canvas>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="logo">VOIDHIVE</div>
+  <button class="btn" onclick="connectWallet()">Connect Wallet</button>
 </div>
-  <div class="void">
-    <img src="logo.png" class="logo" alt="VOIDHIVE">
-    <h1>VOIDHIVE</h1>
-    <p>The living cyber hive where aliens, hackers & digital natives connect.<br>👾👽 Signal flares. Mutant avatars. Unstoppable phenomenon.</p>
-    <div class="buttons">
-      <a href="https://x.com/voidhive360" target="_blank">𝕏</a>
-      <a href="https://instagram.com/voidhivephen" target="_blank">📷 IG</a>
-      <a href="https://tiktok.com/@voidhive24" target="_blank">🎵 TikTok</a>
-      <a href="https://discord.gg/uABRhAxWq" target="_blank">Discord</a>
-      <a href="https://voidhive.vercel.app" target="_blank">ENTER THE HIVE</a>
-    </div>
-    <!-- THE HIVE AWAKENS BANNER -->
-<div style="margin:40px auto; max-width:620px; padding:25px; background:radial-gradient(circle, #1a0033, #0A001F); border:4px solid #39FF9F; border-radius:16px; text-align:center; box-shadow:0 0 40px #FF00FF;">
-  <h2 style="color:#FF00FF; font-family:'Orbitron', sans-serif; font-size:2.2rem; margin-bottom:15px; text-shadow:0 0 20px #00FFFF;">
-    🚨 THE HIVE AWAKENS — FIRST ON-CHAIN MINT LIVE 👾👽
-  </h2>
-  
-  <p style="color:#00FFFF; font-size:1.4rem; line-height:1.5; margin-bottom:20px;">
-    #001 just dropped.<br>
-    The first Legendary Founding Glitch mutant avatar is now on Solana forever.<br><br>
-    First 100 members get theirs airdropped today.<br>
-    You’re not joining an app.<br>
-    You’re becoming part of a living cyber phenomenon.
-  </p>
-  
-  <div style="background:#39FF9F; color:#000; padding:14px; border-radius:12px; font-family:'Press Start 2P'; font-size:1.1rem; margin:20px 0;">
-    Site: <a href="https://voidhive.vercel.app" style="color:#000; text-decoration:underline;">voidhive.vercel.app</a><br>
-    Discord: <a href="YOUR_DISCORD_LINK_HERE" style="color:#000; text-decoration:underline;">JOIN THE HIVE</a><br><br>
-    Drop your handle + wallet with <span style="color:#FF00FF;">#FoundingGlitch</span> to claim yours.
+
+<!-- HERO -->
+<div class="hero">
+  <h1>VOIDHIVE</h1>
+  <p>Crypto • Community • Alpha</p>
+
+  <div>
+    <a href="https://discord.gg/uABRhAxWq" class="btn">Join Discord</a>
+    <button class="btn" onclick="mint()">Mint NFT</button>
   </div>
-  
-  <p style="color:#FFFFFF; font-size:1.2rem; margin-top:15px;">
-    From Managua outward — the swarm is here.<br>
-    <span style="color:#39FF9F;">#VOIDHIVE #CyberPhenomenon #FoundingGlitch</span>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div>👾 <span id="online">132</span> Online</div>
+    <div>🚀 <span id="total">1042</span> Members</div>
+  </div>
+</div>
+
+<!-- CARD -->
+<div class="card">
+  <h2>THE HIVE AWAKENS</h2>
+  <p>
+  First generation mutants emerging on-chain.<br><br>
+  Join early. Earn status. Become signal.
   </p>
 </div>
-    <div style="margin-top:40px; padding:20px; background:rgba(255,0,255,0.1); border:2px solid #39FF9F; border-radius:12px;">
-  <h2 style="color:#FF00FF; font-family:'Orbitron';">THE HIVE GALLERY — LIVE ON-CHAIN</h2>
-  <p style="color:#00FFFF;">First mutants minted March 2026</p>
-  <a href="https://www.solsmint.com/nft-minter" target="_blank" style="color:#FFFFFF; text-decoration:underline;">View #001 on Solana Explorer →</a>
-  <br><br>
-  More coming every day. Join to get yours airdropped.
+
+<!-- DISCORD -->
+<div style="text-align:center;">
+<h2>LIVE SIGNAL</h2>
+<iframe src="https://discord.com/widget?id=YOUR_SERVER_ID&theme=dark"
+width="350" height="500"></iframe>
 </div>
-    <p style="margin-top:50px; font-size:1rem; opacity:0.7;">VOIDHIVE • March 2026 • Built with zero budget & infinite glitch 🐹📫🐼</p>
-  </div>
+
+<!-- FLOAT -->
+<div class="floating">👻 👾 🦩 🎃</div>
+
+<script>
+
+/* PARTICLES */
+const canvas = document.getElementById("bg");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+for(let i=0;i<100;i++){
+  particles.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    size:Math.random()*2,
+    speed:Math.random()*1
+  });
+}
+
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle="#FF00FF";
+  particles.forEach(p=>{
+    p.y+=p.speed;
+    if(p.y>canvas.height) p.y=0;
+    ctx.fillRect(p.x,p.y,p.size,p.size);
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+
+/* LIVE STATS */
+setInterval(()=>{
+  document.getElementById("online").innerText =
+    Math.floor(Math.random()*200)+100;
+  document.getElementById("total").innerText =
+    Math.floor(Math.random()*2000)+1000;
+},3000);
+
+/* WALLET */
+async function connectWallet(){
+  if(window.solana){
+    const res = await window.solana.connect();
+    alert("Connected: "+res.publicKey.toString());
+  } else {
+    alert("Install Phantom Wallet");
+  }
+}
+
+/* FAKE MINT */
+function mint(){
+  alert("Mint coming soon 👾");
+}
+
+</script>
+
 </body>
 </html>
