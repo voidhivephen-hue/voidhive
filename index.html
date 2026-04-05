@@ -1,272 +1,198 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>    
-    <meta charset="UTF-8">    
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
-    <title>VOIDHIVE</title>   
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>    
-      /* Essential for responsive borders */    
-      * {         box-sizing: border-box;    }    
-      body {
-        padding-top: 90px;                
-        margin: 0;        
-        /* Use min-height so content isn't cut off on short, wide screens */        
-        min-height: 100vh;         
-        display: flex;        
-        flex-direction: column;        
-        justify-content: center;        
-        align-items: center;        
-        background-color: #f0f2f5;        
-        font-family: sans-serif;        
-        /* Padding keeps content from touching screen edges on mobile */        
-        padding: 20px;         
-        box-sizing: border-box;        
-        /* ... your existing flex properties ... */        
-        /* --- THE RESPONSIVE BODY BORDER --- */        
-        border: 10px solid #2F2F8F; /* Thickness adjusts to screen edges */        
-        border: 10px solid #2F2F8F;         
-        background-color: #2F2F8F;                        
-        /* 1. Add your image */        
-        background-image: url('IMG_0032.jpeg');        
-        /* 2. Make it cover the whole screen */        
-        background-size: cover;             
-        /* 3. Keep it centered and prevent repeating */        
-        background-position: center;        
-        background-repeat: no-repeat;            
-        /* 4. Optional: Keep background still when scrolling */        
-        background-attachment: fixed;         
-        padding-bottom: 60px;    }    
-        /* 1. The Navigation Bar Container */
-        .top-nav {    
-          position: fixed; 
-          /* Stays at the top while scrolling */    
-          top: 0;   
-          left: 0;    
-          width: 100%;    
-          height: 70px;    
-          background-color: #2F2F8F;  
-          color: #fff;        
-          display: flex;    
-          justify-content: space-between; 
-          /* Pushes items to opposite ends */    
-          align-items: center;    
-          padding: 0 5%; 
-          /* Responsive side padding */    
-          box-sizing: border-box;    
-          z-index: 1000; 
-        /* Ensures it stays above the wireframe card */}
-        /* 2. Logo Styling */
-        /* Styling for the SVG near the Logo */
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px; /* Space between SVG and text */
-        }
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VOIDHIVE • Founding Form</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&display=swap');
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .logo-font { font-family: 'Space Grotesk', sans-serif; }
+  </style>
+</head>
+<body class="h-full bg-zinc-950 text-white flex flex-col min-h-screen">
 
-    .svg-icon {
-        height: 24px; /* Adjust size to match your logo height */
-        width: auto;
-    }  
-    .top-nav {        
-      position: fixed;         
-      top: 0;        
-      left: 0;        
-      width: 100%;        
-      height: 70px;        
-      background-color: #2F2F8F;        
-      color: #fff;        
-      display: flex;        
-      justify-content: 
-      space-between;         
-      align-items: center;        
-      padding: 0 5%;         
-      box-sizing: border-box;        
-      z-index: 1000;     
-    }
-    /* 3. Small Nav Button */
-    .nav-btn {    
-      background-color: transparent;    
-      color: #fff;    
-      border: 1px solid #fff;    
-      padding: 8px 16px;    
-      font-size: 0.8rem;    
-      font-weight: bold;    
-      cursor: pointer;    
-      transition: 0.3s;}    
-  .logo {        
-    font-weight: 800;        
-    font-size: 1.5rem;        
-    letter-spacing: 2px;    
-  }
-  .nav-btn:hover {    
-    background-color: #fff;    
-    color: #000;}    
-  /* Updated styling for the Anchor Nav Button */    
-  .nav-btn {        
-    text-decoration: none; 
-  /* Removes the underline */        
-    display: inline-block;        
-    background-color: transparent;        
-    color: #fff;        
-    border: 1px solid #fff;        
-    padding: 8px 16px;        
-    font-size: 0.8rem;        
-    font-weight: bold;        
-    cursor: pointer;        
-    transition: 0.3s;    }    
-  .nav-btn:hover {        
-    background-color: #fff;        
-    color: #18188F;    
-  }    
-  /* The Wireframe Container */        
-  .wireframe-card {            
-    border: 10px solid #FF0000; 
-  /* The thin wireframe border */            
-    padding: 40px;            
-    display: flex;            
-    flex-direction: column;            
-    align-items: center;            
-    text-align: center;                        
-    /* Responsive Sizing */            
-    width: 100%;            
-    max-width: 500px; 
-    /* Limits width on desktop */            
-    border-radius: 8px; 
-    /* Optional: subtle rounded corners */            
-    background-color: #188F18; 
-    /* Contrast against body */                        
-    /* Add a subtle shadow to make the "frame" pop */            
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);        }    
-  .wireframe-card {        
-    border: 10px solid #FF0000;         
-    padding: 40px;        
-    display: flex;        
-    flex-direction: column;        
-    align-items: center;        
-    text-align: center;        
-    width: 100%;        
-    max-width: 500px;         
-    border-radius: 8px;         
-    background-color: #18188F;         
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);    
-  }    
-  /* Styling for the SVG near the H1 */
-  h1 {
-      display: flex;
-      flex-direction: column; /* Stack them on top of each other */
-      align-items: center;
-      gap: 15px;
-      color: #FFFFFF;
-  }
+  <!-- TOP NAV – your exact VOIDHIVE branding -->
+  <nav class="fixed top-0 left-0 w-full h-16 bg-[#2F2F8F] text-white flex items-center justify-between px-6 md:px-12 z-50 shadow-lg">
+    <div class="flex items-center gap-3">
+      <div class="logo-font text-3xl font-bold tracking-[3px]">VOIDHIVE</div>
+    </div>
+  </nav>
 
-  /* If you want the SVG next to the H1 instead of above it, 
-  change 'column' to 'row' in the h1 rule above */
+  <!-- MAIN FORM CARD – clean modern style with your dark-blue accent -->
+  <main class="flex-1 flex items-center justify-center pt-24 pb-12 px-4">
+    <div class="max-w-md w-full bg-zinc-900 rounded-3xl shadow-2xl p-8 md:p-10 border border-[#2F2F8F]/30">
+      
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-[#2F2F8F] text-white rounded-2xl mb-4 text-4xl">🕳️</div>
+        <h1 class="logo-font text-5xl font-bold tracking-widest text-white">VOIDHIVE</h1>
+        <p class="text-[#2F2F8F] text-xl font-medium mt-1">Founding Form</p>
+        <p class="text-zinc-400 mt-2">Your data goes straight into Supabase</p>
+      </div>
 
-  .svg-icon-large {
-      height: 60px; /* Larger size for the main header */
-      width: auto;
-  }    
-  /* Updated styling for the Main Anchor Button */    
-  .btn {        
-    /* Width settings */        
-    text-decoration: none; 
-    /* Removes the underline */        
-    display: inline-block;        
-    width: 100%;        
-    max-width: 400px; 
-    /* Limits how wide it gets on desktop */                
-    /* Padding and Typography */        
-    max-width: 400px;         
-    padding: 15px 20px;        
-    font-size: clamp(0.9rem, 4vw, 1.1rem);        
-    font-weight: bold;        
-    text-transform: uppercase;                
-    /* Aesthetics */        
-    cursor: pointer;        
-    border: none;        
-    border-radius: 8px;        
-    background-color: #2F2F8F;        
-    color: #fff;        
-    transition: transform 0.2s, 
-    background-color 0.2s;        
-    text-align: center;    
-  }    
-  /* Hover effect for desktop */    
-  .btn:hover {        
-    background-color: #333;        
-    transform: scale(1.02);    
-  }    
-  /* Active effect for mobile taps */    
-  .btn:active {        
-    transform: scale(0.98);    }    
-
-  /* Updated Footer with Social Icons */
-    .footer {        
-        position: absolute; 
-        bottom: 0;        
-        left: 0;        
-        width: 100%;            
-        background-color: #2F2F8F; 
-        color: #fff;           
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 15px; /* Spacing between icons and text */
-        padding: 20px 0;       
-        font-size: 0.8rem;        
-        letter-spacing: 1px;        
-        font-weight: bold;
-    }
-
-    /* Social Icons Container */
-    .social-links {
-        display: flex;
-        justify-content: center; /* This centers them horizontally */
-        align-items: center;     /* This centers them vertically if needed */
-        gap: 20px; /* Space between each icon */
-    }
-
-    /* Individual Social Icon Links */
-    .social-links a {
-        color: #fff;
-        font-size: 1.5rem; /* Icon size */
-        text-decoration: none;
-        transition: color 0.3s ease, transform 0.2s ease;
-    }
-
-    /* Hover effect for social icons */
-    .social-links a:hover {
-        color: #2F2F8F; /* Darker blue on hover */
-        transform: scale(1.1); /* Slight pop effect */
-    }
-  </style><body>    
-  <nav class="top-nav">        
-    <div class="logo">
-      VOIDHIVE
-    </div>               
-    <!-- CHANGED FROM BUTTON TO A -->        
-    <a href="https://forms.gle/cwzgcHMRKmnpva14A" class="nav-btn">FOUNDING FORM</a>    
-  </nav>    
-  <div class="wireframe-card">        
-    <h1>
-      VOIDHIVE
-    </h1>              
-    <!-- CHANGED FROM BUTTON TO A -->        
-    <a href="https://forms.gle/cwzgcHMRKmnpva14A" id="myButton" class="btn">            
-        FOUNDING FORM        
-    </a>    
-  </div>    
-  <footer class="footer">
-        <div class="social-links">
-            <a href="#" target="_blank" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
-            <a href="#" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" target="_blank" aria-label="Discord"><i class="fa-brands fa-discord"></i></a>
-            <a href="#" target="_blank" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
-            <a href="#" target="_blank" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+      <form id="form" class="space-y-6">
+        
+        <!-- X Username -->
+        <div>
+          <label class="block text-sm font-medium mb-2 text-zinc-300">X Username</label>
+          <div class="relative">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400">@</span>
+            <input 
+              type="text" 
+              id="x_username" 
+              required
+              placeholder="yourhandle"
+              class="w-full bg-zinc-800 border border-zinc-700 focus:border-[#2F2F8F] rounded-3xl px-8 py-4 text-white placeholder:text-zinc-500 focus:outline-none transition-colors">
+          </div>
         </div>
-    </footer>
 
+        <!-- Instagram Username -->
+        <div>
+          <label class="block text-sm font-medium mb-2 text-zinc-300">Instagram Username</label>
+          <div class="relative">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400">@</span>
+            <input 
+              type="text" 
+              id="instagram_username" 
+              required
+              placeholder="yourhandle"
+              class="w-full bg-zinc-800 border border-zinc-700 focus:border-[#2F2F8F] rounded-3xl px-8 py-4 text-white placeholder:text-zinc-500 focus:outline-none transition-colors">
+          </div>
+        </div>
+
+        <!-- Monad Wallet Address -->
+        <div>
+          <label class="block text-sm font-medium mb-2 text-zinc-300">Monad Wallet Address</label>
+          <input 
+            type="text" 
+            id="monad_wallet_address" 
+            required
+            placeholder="0x1234...abcd"
+            class="w-full bg-zinc-800 border border-zinc-700 focus:border-[#2F2F8F] rounded-3xl px-4 py-4 text-white placeholder:text-zinc-500 focus:outline-none transition-colors">
+        </div>
+
+        <!-- Solana Wallet Address – NEW -->
+        <div>
+          <label class="block text-sm font-medium mb-2 text-zinc-300">Solana Wallet Address</label>
+          <input 
+            type="text" 
+            id="solana_wallet_address" 
+            required
+            placeholder="7xK...9pQ"
+            class="w-full bg-zinc-800 border border-zinc-700 focus:border-[#2F2F8F] rounded-3xl px-4 py-4 text-white placeholder:text-zinc-500 focus:outline-none transition-colors">
+          <p class="text-xs text-zinc-500 mt-1">Your Solana address (starts with a letter or number)</p>
+        </div>
+
+        <button 
+          type="submit"
+          id="submitBtn"
+          class="w-full bg-[#2F2F8F] hover:bg-[#1f1f6b] active:scale-95 transition-all text-white font-semibold py-4 rounded-3xl text-lg flex items-center justify-center gap-2">
+          <span>SUBMIT FOUNDING FORM</span>
+          <i class="fa-solid fa-rocket"></i>
+        </button>
+      </form>
+
+      <div id="status" class="mt-6 text-center text-sm min-h-[24px]"></div>
+
+      <!-- Debug button -->
+      <button onclick="testConnection()" 
+              class="mt-6 w-full text-xs flex items-center justify-center gap-1 text-zinc-400 hover:text-white transition-colors">
+        <i class="fa-solid fa-plug"></i>
+        <span>🔧 Test Supabase connection</span>
+      </button>
+    </div>
+  </main>
+
+  <!-- FOOTER – your social icons (update the href="#" links with real URLs) -->
+  <footer class="bg-[#2F2F8F] py-8 text-white flex flex-col items-center gap-4 text-sm">
+    <div class="social-links flex gap-8 text-3xl">
+      <a href="#" target="_blank" aria-label="X (Twitter)" class="hover:text-white/70 transition-colors">
+        <i class="fa-brands fa-x-twitter"></i>
+      </a>
+      <a href="#" target="_blank" aria-label="Instagram" class="hover:text-white/70 transition-colors">
+        <i class="fa-brands fa-instagram"></i>
+      </a>
+      <a href="#" target="_blank" aria-label="Discord" class="hover:text-white/70 transition-colors">
+        <i class="fa-brands fa-discord"></i>
+      </a>
+      <a href="#" target="_blank" aria-label="Telegram" class="hover:text-white/70 transition-colors">
+        <i class="fa-brands fa-telegram"></i>
+      </a>
+      <a href="#" target="_blank" aria-label="TikTok" class="hover:text-white/70 transition-colors">
+        <i class="fa-brands fa-tiktok"></i>
+      </a>
+    </div>
+    <p class="font-medium tracking-widest">© VOIDHIVE • THE HIVE IS FORMING</p>
+  </footer>
+
+  <script type="module">
+    // ←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←
+    // REPLACE THESE TWO LINES WITH YOUR REAL SUPABASE VALUES
+    const supabaseUrl = 'https://dylaymhkwsmbjscbppmc.supabase.co'
+    const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5bGF5bWhrd3NtYmpzY2JwcG1jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzOTcwODEsImV4cCI6MjA5MDk3MzA4MX0.fx9z0pvfm96PlxXkKNv7yfs6CIZYeDyZUrOpx_u4Z2A'
+    // ←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←
+
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+    const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+    const form = document.getElementById('form')
+    const status = document.getElementById('status')
+    const submitBtn = document.getElementById('submitBtn')
+
+    function showStatus(message, color = 'blue') {
+      status.innerHTML = `<span class="text-${color}-400">${message}</span>`
+      console.log('%c' + message, `color: ${color === 'green' ? '#22c55e' : color === 'red' ? '#ef4444' : '#3b82f6'}`)
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      
+      submitBtn.disabled = true
+      submitBtn.innerHTML = `
+        <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+        </svg>
+        SUBMITTING TO VOIDHIVE...
+      `
+
+      const data = {
+        x_username: document.getElementById('x_username').value.trim(),
+        instagram_username: document.getElementById('instagram_username').value.trim(),
+        monad_wallet_address: document.getElementById('monad_wallet_address').value.trim(),
+        solana_wallet_address: document.getElementById('solana_wallet_address').value.trim()
+      }
+
+      console.log('🚀 Inserting VOIDHIVE data:', data)
+
+      const { error } = await supabase
+        .from('submissions')
+        .insert([data])
+
+      if (error) {
+        console.error('Supabase error:', error)
+        showStatus(`❌ ${error.message}`, 'red')
+      } else {
+        showStatus('✅ FOUNDING FORM SUBMITTED!<br>Welcome to VOIDHIVE. Your data is now in Supabase.', 'green')
+        form.reset()
+      }
+
+      submitBtn.disabled = false
+      submitBtn.innerHTML = `SUBMIT FOUNDING FORM <i class="fa-solid fa-rocket"></i>`
+    })
+
+    // Quick connection test
+    window.testConnection = async () => {
+      showStatus('Testing connection to Supabase...', 'blue')
+      const { error } = await supabase.from('submissions').select('*').limit(1)
+      if (error) {
+        showStatus(`Connection failed: ${error.message}`, 'red')
+      } else {
+        showStatus('✅ Supabase is connected! You can submit now.', 'green')
+      }
+    }
+  </script>
 </body>
 </html>
